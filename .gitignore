@@ -1,0 +1,57 @@
+# Node
+node_modules/
+.next/
+out/
+dist/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Secrets and local environment files (NEVER commit real keys)
+.env
+.env.local
+.env.*.local
+.env.*
+!.env.example
+**/.env
+**/.env.local
+**/.env.*
+!**/.env.example
+*.pem
+*.key
+*.p12
+credentials.json
+secrets.json
+service-account*.json
+
+# Local data / temp
+*.db
+*.sqlite3
+*.log
+tmp/
+temp/
+generated_audio/*
+!generated_audio/.gitkeep
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
