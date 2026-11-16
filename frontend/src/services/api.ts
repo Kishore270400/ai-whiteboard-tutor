@@ -1,5 +1,6 @@
 import axios, { AxiosError, isAxiosError } from "axios";
 import type { ApiErrorBody, Lesson, LessonGenerateRequest } from "@/types/lesson";
+import { resolveApiBaseUrl, toApiPath } from "@/services/apiUrl";
 
 export type HealthResponse = {
   status: string;
@@ -8,8 +9,8 @@ export type HealthResponse = {
   openai_configured?: boolean;
 };
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "http://127.0.0.1:8000";
+/** Same-origin "/api" in production; override with NEXT_PUBLIC_API_URL for local FastAPI. */
+const API_BASE_URL = resolveApiBaseUrl();
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -129,7 +130,7 @@ function extractApiError(error: unknown): ApiRequestError {
 
     if (code === "missing_api_key") {
       message =
-        "OpenAI API key is not configured on the backend. Add OPENAI_API_KEY to backend/.env and restart FastAPI.";
+        "OpenAI API key is not configured on the backend. Add OPENAI_API_KEY in the backend environment and redeploy.";
     }
 
     return new ApiRequestError(message, {
@@ -144,7 +145,8 @@ function extractApiError(error: unknown): ApiRequestError {
 }
 
 export async function getHealth(): Promise<HealthResponse> {
-  const response = await api.get<HealthResponse>("/api/health");
+  // base "/api" + "/health" => public "/api/health" (matches FastAPI)
+  const response = await api.get<HealthResponse>(toApiPath("/health"));
   return response.data;
 }
 
@@ -169,7 +171,7 @@ export async function checkBackendHealth(): Promise<BackendHealthResult> {
 
 export async function generateLesson(payload: LessonGenerateRequest): Promise<Lesson> {
   try {
-    const response = await lessonApi.post<Lesson>("/api/lessons/generate", {
+    const response = await lessonApi.post<Lesson>(toApiPath("/lessons/generate"), {
       topic: payload.topic.trim(),
       level: payload.level ?? "beginner",
       duration: payload.duration ?? 120,
@@ -182,7 +184,7 @@ export async function generateLesson(payload: LessonGenerateRequest): Promise<Le
 
 export async function getLesson(lessonId: string): Promise<Lesson> {
   try {
-    const response = await lessonApi.get<Lesson>(`/api/lessons/${lessonId}`);
+    const response = await lessonApi.get<Lesson>(toApiPath(`/lessons/${lessonId}`));
     return response.data;
   } catch (error) {
     throw extractApiError(error);

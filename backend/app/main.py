@@ -13,6 +13,9 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
+    # Allow preview/production frontends on Vercel when calling the API cross-origin.
+    # Same-origin browser calls through /api do not need CORS, but local + preview do.
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],

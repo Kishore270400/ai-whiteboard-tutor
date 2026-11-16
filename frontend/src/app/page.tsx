@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   ArrowRight, AudioLines, BookOpen, BrainCircuit,
@@ -102,14 +103,14 @@ export default function Home() {
   return (
     <main className="min-h-screen overflow-hidden">
       <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-        <a href="/" className="flex items-center gap-2 font-bold tracking-tight">
+        <Link href="/" className="flex items-center gap-2 font-bold tracking-tight">
           <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-600 text-white">
             <GraduationCap size={23} />
           </span>
           <span className="text-lg">Whiteboard<span className="text-violet-600">AI</span></span>
-        </a>
+        </Link>
         <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
-          <a className="hover:text-violet-700" href="/">Home</a>
+          <Link className="hover:text-violet-700" href="/">Home</Link>
           <a className="hover:text-violet-700" href="#features">Features</a>
           <a className="hover:text-violet-700" href="#how-it-works">How it works</a>
         </nav>
